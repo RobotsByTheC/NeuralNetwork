@@ -4,7 +4,7 @@
 sysProps.xml
 
 # ignore build and generated files
-/bin/
-/build/
-/doc/
-/dist/
+NeuralNetwork*/bin/
+NeuralNetwork*/build/
+NeuralNetwork*/doc/
+NeuralNetwork*/dist/

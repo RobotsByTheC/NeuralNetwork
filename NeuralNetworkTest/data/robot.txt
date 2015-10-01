@@ -1,0 +1,4 @@
+topology: 1 5 1 1
+eta: 0.3
+momentum: 0.1
+transfer_function: tanh

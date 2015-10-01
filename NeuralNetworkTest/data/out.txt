@@ -1,0 +1,11 @@
+topology: 1 1
+eta: 0.15
+momentum: 0.2
+transfer_function: sig
+in: 0.0
+out: 1.0
+in: 1.0
+out: 0.0
+
+neuron: -8.983788831183183
+neuron: 4.3886413719695945
