@@ -127,4 +127,14 @@ public class Neuron {
         }
 
     }
+    
+    public void reset() {
+        sum = 0;
+        gradient = 0;
+        outputValue = 0;
+        
+        for(Connection c : outputConnections) {
+            c.reset();
+        }
+    }
 }

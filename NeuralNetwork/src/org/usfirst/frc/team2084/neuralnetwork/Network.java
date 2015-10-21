@@ -32,7 +32,8 @@ public class Network {
      * @param momentum the learning momentum
      * @param transferFunction the transfer function
      */
-    public Network(final int[] topology, final double eta, final double momentum, final TransferFunction transferFunction) {
+    public Network(final int[] topology, final double eta, final double momentum,
+            final TransferFunction transferFunction) {
         this.topology = topology;
         this.eta = eta;
         this.momentum = momentum;
@@ -49,7 +50,8 @@ public class Network {
             final Neuron[] layer = layers[layerNumber] = new Neuron[layerSize + 1];
 
             // number of outputs to a neuron
-            final int numberOutputs = (layerNumber == numberOfLayers - 1) ? 0 : topology[layerNumber + 1];
+            final int numberOutputs = (layerNumber == numberOfLayers - 1) ? 0 : topology[layerNumber
+                    + 1];
 
             // fill layer with neurons and add bias neuron to the layer;
             for (int neuronNumber = 0; neuronNumber <= layerSize; neuronNumber++) {
@@ -120,12 +122,12 @@ public class Network {
         for (int n = 0; n < outputLayer.length - 1; n++) {
             Neuron output = outputLayer[n];
             final double delta = targetValues[n] - output.getOutputValue();
-            error += Math.abs(delta);
+            error += delta * delta;
 
             // Calculate output layer gradients
             outputLayer[n].calculateOutputGradients(targetValues[n]);
         }
-        // error = Math.sqrt(error / outputLayer.length);
+        error = Math.sqrt(error / outputLayer.length);
 
         // error/=(* numPatterns); //get average error squared
         // error/=outputLayer.length - 1; //get average error squared
@@ -293,5 +295,19 @@ public class Network {
      */
     public Neuron[] getOutputLayer() {
         return layers[layers.length - 1];
+    }
+
+    public void reset() {
+        // Reset recent average error
+        recentAverageError = 0;
+        
+        // Reset all neurons
+        for (Neuron[] layer : layers) {
+            for (Neuron n : layer) {
+                n.reset();
+            }
+            // Reset the bias nueron's output to 1
+            layer[layer.length - 1].setOutputValue(1.0);
+        }
     }
 }

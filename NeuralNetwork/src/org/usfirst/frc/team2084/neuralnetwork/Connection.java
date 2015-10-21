@@ -23,4 +23,9 @@ public class Connection {
      * for momentum calculation.
      */
     public double deltaWeight = 0;
+    
+    public void reset() {
+        weight = Math.random();
+        deltaWeight = 0;
+    }
 }
