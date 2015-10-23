@@ -1,11 +1,25 @@
 topology: 1 1
-eta: 0.15
-momentum: 0.2
-transfer_function: sig
+eta: 0.05
+momentum: 0.1
+transfer_function: tanh
+in: -4.0
+out: -1.0
+in: -3.0
+out: -0.75
+in: -2.0
+out: -0.5
+in: -1.0
+out: -0.25
 in: 0.0
-out: 1.0
-in: 1.0
 out: 0.0
+in: 1.0
+out: 0.25
+in: 2.0
+out: 0.5
+in: 3.0
+out: 0.75
+in: 4.0
+out: 1.0
 
-neuron: -8.983788831183183
-neuron: 4.3886413719695945
+neuron: 0.5773131294992762
+neuron: 0.849655847723354

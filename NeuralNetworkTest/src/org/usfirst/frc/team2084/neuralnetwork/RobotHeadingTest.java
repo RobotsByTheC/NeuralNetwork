@@ -157,7 +157,7 @@ public class RobotHeadingTest implements Test {
                         double time = 0;
                         double error = 1;
                         // Pick a random desired heading
-                        double desired = Math.random() * 360;
+                        double desired = Math.random();
                         System.out.println("Trying to rotate to heading: " + desired);
                         desiredHeadingData.setValue(desired);
                         headingTimeSeries.clear();
@@ -186,7 +186,7 @@ public class RobotHeadingTest implements Test {
                             // System.out.println("Speed: " + speed);
                             // System.out.println("Heading: " +
                             // robot.heading);
-                            headingData.setValue(robot.heading);
+                            headingData.setValue(robot.heading * 180);
                             headingTimeSeries.add(time, robot.heading);
                             errorTimeSeries.add(time, error);
                             // System.out.println("Error: " + error + "\n");

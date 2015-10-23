@@ -17,8 +17,8 @@ public class Network {
 
     private double recentAverageError;
     private final int[] topology;
-    private final double eta;
-    private final double momentum;
+    private double eta;
+    private double momentum;
     private final TransferFunction transferFunction;
     private final Neuron[][] layers;
     private final double[] results;
@@ -175,6 +175,15 @@ public class Network {
     public double getEta() {
         return eta;
     }
+    
+    /**
+     * Sets the learning rate of the network.
+     * 
+     * @param eta the learning rate
+     */
+    public void setEta(double eta) {
+        this.eta = eta;
+    }
 
     /**
      * Gets the momentum of the network.
@@ -183,6 +192,15 @@ public class Network {
      */
     public double getMomentum() {
         return momentum;
+    }
+    
+    /**
+     * Sets the momentum of the network.
+     * 
+     * @param momentum the momentum
+     */
+    public void setMomentum(double momentum) {
+        this.momentum = momentum;
     }
 
     /**

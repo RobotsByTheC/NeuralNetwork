@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * @author ben
  */
-public class FileTest {
+public class FileTest implements Test {
 
     public static final int MAX_EPOCHS = 1000000;
     public static final double MAX_ERROR = 0.01;
@@ -21,9 +21,10 @@ public class FileTest {
      * Trains the network using a standard input file. This is not that useful
      * for an FRC robot.
      */
+    @Override
     public void run() {
         try {
-            Data data = new Data(new File("data/not.txt"));
+            Data data = new Data(new File("data/line.txt"));
             Network network = data.getNetwork();
 
             double[][] inputs = data.getInputs();
