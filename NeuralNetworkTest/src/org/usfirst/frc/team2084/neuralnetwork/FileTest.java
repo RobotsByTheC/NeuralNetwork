@@ -24,7 +24,7 @@ public class FileTest implements Test {
     @Override
     public void run() {
         try {
-            Data data = new Data(new File("data/line.txt"));
+            Data data = new Data(new File("data/networks/line.txt"));
             Network network = data.getNetwork();
 
             double[][] inputs = data.getInputs();
@@ -70,7 +70,7 @@ public class FileTest implements Test {
                 }
             }
             // Save the network to an output file
-            data.save(new File("data/out.txt"));
+            data.save(new File("data/networks/out.txt"));
             // network.feedForward(new double[] { 1, 1 });
             // System.out.println(Arrays.toString(network.getResults()));
         } catch (Exception e) {
