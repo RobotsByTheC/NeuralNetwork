@@ -19,4 +19,5 @@ The application loads a set of CSV files from the chosen directory and displays 
 In the `data/recorded-data` directory, there are some sample data directories. 
 - `random-data`: multiple randomly generated data files.
 - `cubic-data`: data for a cubic function. 
-- `cubic-sparse-data`: the same cubic function, but with fewer data points 
+- `cubic-sparse-data`: the same cubic function, but with fewer data points
+- `robot-data`: data recorded from the robot
