@@ -427,7 +427,7 @@ public class Data {
 
     /**
      * Write the network data to the specified file. This writes all known data,
-     * including topology/parameter, input, target outputs, and connectoin
+     * including topology/parameter, input, target outputs, and connection
      * weights.
      * 
      * @param file the file to write

@@ -9,8 +9,6 @@ package org.usfirst.frc.team2084.neuralnetwork;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -51,6 +49,7 @@ public class HeadingNeuralNetworkTrainer {
 
     private final JFrame frame = new JFrame("Heading Neural Network Trainer");
     private final JFileChooser dataDirectoryChooser = new JFileChooser(getWorkingDirectory());
+    private final JFileChooser saveFileChooser = new JFileChooser(getWorkingDirectory());
 
     private final JPanel graphPanel = new JPanel();
     private final JPanel controlPanel = new JPanel();
@@ -67,6 +66,7 @@ public class HeadingNeuralNetworkTrainer {
 
     private final JButton chooseDataButton = new JButton("Choose Data");
     private final JButton trainButton = new JButton("Train");
+    private final JButton saveButton = new JButton("Save");
 
     private File dataDirectory;
     private final Network network;
@@ -131,27 +131,21 @@ public class HeadingNeuralNetworkTrainer {
                     controlPanel.add(momentumField);
                 }
 
-                chooseDataButton.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (dataDirectoryChooser.showOpenDialog(
-                                frame) == JFileChooser.APPROVE_OPTION) {
-                            dataDirectory = dataDirectoryChooser.getSelectedFile();
-                            displayData();
-                        }
+                chooseDataButton.addActionListener((e) -> {
+                    if (dataDirectoryChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                        dataDirectory = dataDirectoryChooser.getSelectedFile();
+                        displayData();
                     }
                 });
                 controlPanel.add(chooseDataButton);
 
-                trainButton.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        trainNetwork();
-                    }
-                });
+                trainButton.addActionListener((e) -> trainNetwork());
                 controlPanel.add(trainButton);
+
+                saveButton.addActionListener((e) -> {
+                    saveNetwork();
+                });
+                controlPanel.add(saveButton);
 
                 content.add(controlPanel, BorderLayout.SOUTH);
 
@@ -212,12 +206,15 @@ public class HeadingNeuralNetworkTrainer {
 
         for (double angle = -Math.PI; angle <= Math.PI; angle += 0.05) {
             double scaledAngle = convertAngleToInput(angle);
-            network.feedForward(scaledAngle);
-            double fAngle = angle;
-            double output = network.getOutputLayer()[0].getOutputValue();
-            SwingUtilities.invokeLater(() -> {
-                outputGraphNetworkSeries.add(fAngle, output);
-            });
+            synchronized (this) {
+                network.feedForward(scaledAngle);
+                double fAngle = angle;
+                double output = network.getOutputLayer()[0].getOutputValue();
+
+                SwingUtilities.invokeLater(() -> {
+                    outputGraphNetworkSeries.add(fAngle, output);
+                });
+            }
         }
     }
 
@@ -242,9 +239,11 @@ public class HeadingNeuralNetworkTrainer {
                 @Override
                 protected Void doInBackground() throws Exception {
                     // Reset the neural network to default values
-                    network.reset();
-                    network.setEta(eta);
-                    network.setMomentum(momentum);
+                    synchronized (this) {
+                        network.reset();
+                        network.setEta(eta);
+                        network.setMomentum(momentum);
+                    }
 
                     outer: for (int j = 0; j < iterations; j++) {
                         for (int i = 0; i < data.size(); i++) {
@@ -252,8 +251,10 @@ public class HeadingNeuralNetworkTrainer {
                                 XYDataItem d = data.get(i);
                                 double error = convertAngleToInput(d.getXValue());
                                 double output = d.getYValue();
-                                network.feedForward(error);
-                                network.backPropagation(output);
+                                synchronized (this) {
+                                    network.feedForward(error);
+                                    network.backPropagation(output);
+                                }
                                 int jl = j;
                                 int il = i;
                                 int progress = (int) (((float) (data.size() * jl + il + 1)
@@ -289,6 +290,28 @@ public class HeadingNeuralNetworkTrainer {
                 }
             });
             trainingWorker.execute();
+        }
+    }
+
+    private void saveNetwork() {
+        if (saveFileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+            File saveFile = saveFileChooser.getSelectedFile();
+
+            new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    synchronized (network) {
+                        new Data(network).save(saveFile);
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                }
+            }.execute();
         }
     }
 
