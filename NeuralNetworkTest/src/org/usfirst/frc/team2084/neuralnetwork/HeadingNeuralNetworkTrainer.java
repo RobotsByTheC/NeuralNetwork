@@ -59,10 +59,12 @@ public class HeadingNeuralNetworkTrainer {
     private final XYSeries outputGraphNetworkSeries;
     private final XYSeries outputGraphDataSeries;
 
+    private final NumberFormat integerFormat = NumberFormat.getIntegerInstance();
     private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
     private final JFormattedTextField etaField = new JFormattedTextField(numberFormat);
     private final JFormattedTextField momentumField = new JFormattedTextField(numberFormat);
+    private final JFormattedTextField iterationsField = new JFormattedTextField(integerFormat);
 
     private final JButton chooseDataButton = new JButton("Choose Data");
     private final JButton trainButton = new JButton("Train");
@@ -129,6 +131,15 @@ public class HeadingNeuralNetworkTrainer {
                             (evt) -> momentum = ((Number) evt.getNewValue()).doubleValue());
                     controlPanel.add(momentumLabel);
                     controlPanel.add(momentumField);
+
+                    JLabel iterationsLabel = new JLabel("Iterations:");
+                    iterationsLabel.setLabelFor(iterationsField);
+                    iterationsField.setText(Integer.toString(iterations));
+                    iterationsField.setColumns(10);
+                    iterationsField.addPropertyChangeListener("value",
+                            (evt) -> iterations = ((Number) evt.getNewValue()).intValue());
+                    controlPanel.add(iterationsLabel);
+                    controlPanel.add(iterationsField);
                 }
 
                 chooseDataButton.addActionListener((e) -> {
